@@ -32,9 +32,13 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="GerenciadorDeArquivos.cpp" />
+		<Unit filename="GerenciadorDeArquivos.h" />
 		<Unit filename="ItemNetflix.cpp" />
 		<Unit filename="ItemNetflix.h" />
 		<Unit filename="Main.cpp" />
+		<Unit filename="StringHelpers.cpp" />
+		<Unit filename="StringHelpers.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

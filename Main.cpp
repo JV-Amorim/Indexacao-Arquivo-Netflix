@@ -1,10 +1,15 @@
 #include <iostream>
 #include "ItemNetflix.h"
+#include "GerenciadorDeArquivos.h"
 
 using namespace std;
 
 int main()
 {
-    cout << "Hello world!" << endl;
+    GerenciadorDeArquivos gerenciador;
+
+    vector<ItemNetflix> itens = gerenciador.obterTodosOsItensDoArquivoCsv();
+    ItemNetflix::visualizarLista(itens, 100);
+
     return 0;
 }
