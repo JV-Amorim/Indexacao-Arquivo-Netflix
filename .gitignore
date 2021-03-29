@@ -2,3 +2,4 @@
 *.depend
 bin/
 obj/
+arq_index_*

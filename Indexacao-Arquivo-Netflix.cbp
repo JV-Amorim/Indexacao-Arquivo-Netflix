@@ -34,6 +34,10 @@
 		</Compiler>
 		<Unit filename="GerenciadorDeArquivos.cpp" />
 		<Unit filename="GerenciadorDeArquivos.h" />
+		<Unit filename="ItemIndiceDireto.cpp" />
+		<Unit filename="ItemIndiceDireto.h" />
+		<Unit filename="ItemIndiceIndireto.cpp" />
+		<Unit filename="ItemIndiceIndireto.h" />
 		<Unit filename="ItemNetflix.cpp" />
 		<Unit filename="ItemNetflix.h" />
 		<Unit filename="Main.cpp" />
