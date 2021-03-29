@@ -11,12 +11,7 @@ public:
     std::vector<std::string> elenco{}, generos{};
 
     ItemNetflix();
-
     void visualizarItem();
-    std::string toCsvLine();
-
-    static void visualizarLista(std::vector<ItemNetflix> t_itens);
-    static void visualizarLista(std::vector<ItemNetflix> t_itens, int t_limite);
     static ItemNetflix parseFromCsvLine(std::string t_conteudo);
 };
 

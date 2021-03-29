@@ -11,7 +11,6 @@ private:
     const std::string m_nomeDoArquivoCsv{"netflix_titles.csv"};
 public:
     GerenciadorDeArquivos();
-    std::vector<ItemNetflix> obterTodosOsItensDoArquivoCsv();
 };
 
 #endif // GERENCIADOR_ARQUIVO_H
