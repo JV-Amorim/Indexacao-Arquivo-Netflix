@@ -1,4 +1,3 @@
-#include <iostream>
 #include "ItemIndiceIndireto.h"
 #include "StringHelpers.h"
 
@@ -27,7 +26,6 @@ bool ItemIndiceIndireto::escreverObjetoNoArquivo(ofstream& t_arquivoAberto)
 
     if (t_arquivoAberto.fail())
     {
-        cout << "ERRO -> Ocorreu um erro na gravacao de um item de indice." << endl;
         return false;
     }
 

@@ -8,27 +8,32 @@ using namespace std;
 
 GerenciadorDeArquivos::GerenciadorDeArquivos() { }
 
-bool GerenciadorDeArquivos::gerarPrimeiroArquivoDeIndices()
+bool GerenciadorDeArquivos::gerarArquivosDeIndices()
 {
     ifstream arquivoCsv(m_nomeDoArquivoCsv);
-    ofstream arquivoDeIndices(m_nomesDosArquivosDeIndices[0]);
     string output;
 
-    if (arquivoCsv.fail())
+    ofstream arquivoDeIndices1(m_nomesDosArquivosDeIndices[0]);
+    ofstream arquivoDeIndices2(m_nomesDosArquivosDeIndices[1]);
+    ofstream arquivoDeIndices3(m_nomesDosArquivosDeIndices[2]);
+    ofstream arquivoDeIndices4(m_nomesDosArquivosDeIndices[3]);
+    ofstream arquivoDeIndices5(m_nomesDosArquivosDeIndices[4]);
+
+    bool algumArquivoFalhou =
+        arquivoCsv.fail() || arquivoDeIndices1.fail() || arquivoDeIndices2.fail()
+        || arquivoDeIndices3.fail() || arquivoDeIndices4.fail() || arquivoDeIndices5.fail();
+
+    if (algumArquivoFalhou)
     {
         cout << "ERRO -> Nao foi possivel manipular o arquivo " << m_nomeDoArquivoCsv << "." << endl;
 
         arquivoCsv.close();
-        arquivoDeIndices.close();
-        return false;
-    }
+        arquivoDeIndices1.close();
+        arquivoDeIndices2.close();
+        arquivoDeIndices3.close();
+        arquivoDeIndices4.close();
+        arquivoDeIndices5.close();
 
-    if (arquivoDeIndices.fail())
-    {
-        cout << "ERRO -> Nao foi possivel manipular o arquivo " << m_nomesDosArquivosDeIndices[0] << "." << endl;
-
-        arquivoCsv.close();
-        arquivoDeIndices.close();
         return false;
     }
 
@@ -38,82 +43,52 @@ bool GerenciadorDeArquivos::gerarPrimeiroArquivoDeIndices()
     while (getline(arquivoCsv, output))
     {
         ItemNetflix itemNetflix = ItemNetflix::parseFromCsvLine(output);
-        ItemIndiceDireto itemIndiceDireto(itemNetflix.id, posicaoAtual++);
 
-        bool resultadoDaEscrita = itemIndiceDireto.escreverObjetoNoArquivo(arquivoDeIndices);
+        ItemIndiceDireto itemIndiceDireto(itemNetflix.id, posicaoAtual);
+        ItemIndiceIndireto itemIndiceIndireto(itemNetflix.id, itemNetflix.titulo, posicaoAtual);
 
-        if (!resultadoDaEscrita)
+        bool resultadoDaEscrita1 = itemIndiceDireto.escreverObjetoNoArquivo(arquivoDeIndices1); // arq_index_1
+        bool resultadoDaEscrita2 = itemIndiceIndireto.escreverObjetoNoArquivo(arquivoDeIndices2); // arq_index_2
+
+        bool resultadoDaEscrita3 = true, resultadoDaEscrita4 = true;
+        if (itemNetflix.tipo == "Movie")
         {
-            cout << "ERRO -> O arquivo de indices nao foi gerado ou ficou incompleto." << endl;
+            resultadoDaEscrita3= itemIndiceDireto.escreverObjetoNoArquivo(arquivoDeIndices3); // arq_index_3
+        }
+        else if (itemNetflix.tipo == "TV Show")
+        {
+            resultadoDaEscrita4 = itemIndiceDireto.escreverObjetoNoArquivo(arquivoDeIndices4); // arq_index_4
+        }
+
+        bool resultadoDaEscrita5 = true;
+        if (itemNetflix.pais.find("Brazil") != string::npos)
+        {
+            resultadoDaEscrita5 = itemIndiceDireto.escreverObjetoNoArquivo(arquivoDeIndices5); // arq_index_5
+        }
+
+        if (!resultadoDaEscrita1 || !resultadoDaEscrita2 || !resultadoDaEscrita3 || !resultadoDaEscrita4 || !resultadoDaEscrita5)
+        {
+            cout << "ERRO -> Os arquivo de indices nao foram gerados ou ficaram incompletos." << endl;
+
             arquivoCsv.close();
-            arquivoDeIndices.close();
+            arquivoDeIndices1.close();
+            arquivoDeIndices2.close();
+            arquivoDeIndices3.close();
+            arquivoDeIndices4.close();
+            arquivoDeIndices5.close();
+
             return false;
         }
+
+        posicaoAtual++;
     }
 
     arquivoCsv.close();
-    arquivoDeIndices.close();
-    return true;
-}
-
-bool GerenciadorDeArquivos::gerarSegundoArquivoDeIndices()
-{
-    ifstream arquivoCsv(m_nomeDoArquivoCsv);
-    ofstream arquivoDeIndices(m_nomesDosArquivosDeIndices[1]);
-    string output;
-
-    if (arquivoCsv.fail())
-    {
-        cout << "ERRO -> Nao foi possivel manipular o arquivo " << m_nomeDoArquivoCsv << "." << endl;
-
-        arquivoCsv.close();
-        arquivoDeIndices.close();
-        return false;
-    }
-
-    if (arquivoDeIndices.fail())
-    {
-        cout << "ERRO -> Nao foi possivel manipular o arquivo " << m_nomesDosArquivosDeIndices[0] << "." << endl;
-
-        arquivoCsv.close();
-        arquivoDeIndices.close();
-        return false;
-    }
-
-    getline(arquivoCsv, output);  // Header do arquivo.
-
-    int posicaoAtual = 1;
-    while (getline(arquivoCsv, output))
-    {
-        ItemNetflix itemNetflix = ItemNetflix::parseFromCsvLine(output);
-        ItemIndiceIndireto itemIndiceIndireto(itemNetflix.id, itemNetflix.titulo, posicaoAtual++);
-
-        bool resultadoDaEscrita = itemIndiceIndireto.escreverObjetoNoArquivo(arquivoDeIndices);
-
-        if (!resultadoDaEscrita)
-        {
-            cout << "ERRO -> O arquivo de indices nao foi gerado ou ficou incompleto." << endl;
-            arquivoCsv.close();
-            arquivoDeIndices.close();
-            return false;
-        }
-    }
-
-    arquivoCsv.close();
-    arquivoDeIndices.close();
-    return true;
-}
-
-bool GerenciadorDeArquivos::gerarTerceiroQuartoArquivosDeIndices()
-{
-    // TODO - Implementar método.
-
-    return true;
-}
-
-bool GerenciadorDeArquivos::gerarQuintoArquivoDeIndices()
-{
-    // TODO - Implementar método.
+    arquivoDeIndices1.close();
+    arquivoDeIndices2.close();
+    arquivoDeIndices3.close();
+    arquivoDeIndices4.close();
+    arquivoDeIndices5.close();
 
     return true;
 }

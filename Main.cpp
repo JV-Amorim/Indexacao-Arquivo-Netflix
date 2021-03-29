@@ -7,8 +7,6 @@ using namespace std;
 int main()
 {
     GerenciadorDeArquivos gerenciador;
-    gerenciador.gerarPrimeiroArquivoDeIndices();
-    gerenciador.gerarSegundoArquivoDeIndices();
-
+    gerenciador.gerarArquivosDeIndices();
     return 0;
 }

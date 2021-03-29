@@ -17,14 +17,13 @@ public:
     /// Construtor padrão.
     GerenciadorDeArquivos();
 
+    /// Gera os arquivos de índices.
+    bool gerarArquivosDeIndices();
+
     /// Gera o arquivo de índices direto mapeando o ID de todos os filmes e séries (arq_index_1).
-    bool gerarPrimeiroArquivoDeIndices();
     /// Gera o arquivo de índices indireto para recuperar, através do título, o ID de um filme ou série (arq_index_2).
-    bool gerarSegundoArquivoDeIndices();
     /// Gera os dois arquivos de índices diretos mapeando os ID de todos os filmes e de todas as séries (arq_index_3 e arq_index_4).
-    bool gerarTerceiroQuartoArquivosDeIndices();
     /// Gera um arquivo de índices mapeando o ID de todos os filmes e séries brasileiras (arq_index_5).
-    bool gerarQuintoArquivoDeIndices();
 
     /// Obtém o conjunto de índices do primeiro arquivo de índices (arq_index_1).
     std::vector<ItemIndiceDireto> obterPrimeiroConjuntoDeIndices();
