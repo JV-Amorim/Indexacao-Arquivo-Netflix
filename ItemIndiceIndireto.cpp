@@ -1,3 +1,5 @@
+#include <iostream>
+#include <string.h>
 #include "ItemIndiceIndireto.h"
 #include "StringHelpers.h"
 
@@ -5,24 +7,15 @@ using namespace std;
 
 // Métodos da classe ItemIndiceIndireto:
 
-ItemIndiceIndireto::ItemIndiceIndireto(string m_idDoItemNetflix, std::string m_tituloDoItemNetflix, int m_posicaoNoArquivo)
+ItemIndiceIndireto::ItemIndiceIndireto(string m_idDoItemNetflix, std::string m_tituloDoItemNetflix)
 {
     idDoItemNetflix = m_idDoItemNetflix;
-    posicaoNoArquivo = m_posicaoNoArquivo;
     tituloDoItemNetflix = m_tituloDoItemNetflix;
 }
 
-ItemIndiceIndireto ItemIndiceIndireto::parseFromFileLine(string t_conteudo)
+bool ItemIndiceIndireto::escreverItemIndiceNoArquivo(ofstream& t_arquivoAberto)
 {
-    // TODO - Implementar método.
-
-    ItemIndiceIndireto item("-1", "", -1);
-    return item;
-}
-
-bool ItemIndiceIndireto::escreverObjetoNoArquivo(ofstream& t_arquivoAberto)
-{
-    t_arquivoAberto << idDoItemNetflix << ";" << tituloDoItemNetflix << ";" << posicaoNoArquivo << endl;
+    t_arquivoAberto << idDoItemNetflix << ";" << tituloDoItemNetflix << endl;
 
     if (t_arquivoAberto.fail())
     {
@@ -30,4 +23,49 @@ bool ItemIndiceIndireto::escreverObjetoNoArquivo(ofstream& t_arquivoAberto)
     }
 
     return true;
+}
+
+ItemNetflix ItemIndiceIndireto::obterItemNetflix(vector<ItemIndiceDireto> conjuntoDeIndicesDiretos, ifstream& t_arquivoCSV)
+{
+    int posicaoNoArquivo = -1;
+
+    if (t_arquivoCSV.fail())
+    {
+        cout << "Ocorreu um erro ao obter a posicao do ItemNetflix que possui ID = " << idDoItemNetflix << "." << endl;
+        return {};
+    }
+
+    for (int i = 0; i < (int)conjuntoDeIndicesDiretos.size(); i++)
+    {
+        if (conjuntoDeIndicesDiretos[i].idDoItemNetflix == idDoItemNetflix)
+        {
+            posicaoNoArquivo = conjuntoDeIndicesDiretos[i].posicaoNoArquivo;
+            break;
+        }
+    }
+
+    t_arquivoCSV.clear();
+    t_arquivoCSV.seekg(posicaoNoArquivo, ios::beg);
+
+    string output;
+    getline(t_arquivoCSV, output);
+
+    if (t_arquivoCSV.fail())
+    {
+        cout << "Ocorreu um erro ao obter o ItemNetflix que possui ID = " << idDoItemNetflix << "." << endl;
+        return {};
+    }
+
+    return ItemNetflix::parseFromCsvLine(output);
+}
+
+ItemIndiceIndireto ItemIndiceIndireto::parseFromFileLine(string t_conteudo)
+{
+    char* copiaDoConteudo = _strdup(t_conteudo.c_str());
+
+    string idDoItemNetflix = strsep(&copiaDoConteudo, ";");
+    string tituloDoItemNetflix = strsep(&copiaDoConteudo, ";");
+
+    ItemIndiceIndireto item(idDoItemNetflix, tituloDoItemNetflix);
+    return item;
 }

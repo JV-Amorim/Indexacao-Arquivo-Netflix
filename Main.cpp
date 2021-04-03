@@ -1,5 +1,7 @@
 #include <iostream>
 #include "ItemNetflix.h"
+#include "ItemIndiceDireto.h"
+#include "ItemIndiceIndireto.h"
 #include "GerenciadorDeArquivos.h"
 
 using namespace std;
