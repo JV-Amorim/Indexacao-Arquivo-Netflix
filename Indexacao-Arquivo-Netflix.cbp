@@ -41,6 +41,7 @@
 		<Unit filename="ItemNetflix.cpp" />
 		<Unit filename="ItemNetflix.h" />
 		<Unit filename="Main.cpp" />
+		<Unit filename="Main.h" />
 		<Unit filename="StringHelpers.cpp" />
 		<Unit filename="StringHelpers.h" />
 		<Extensions>
