@@ -32,6 +32,8 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="App.cpp" />
+		<Unit filename="App.h" />
 		<Unit filename="GerenciadorDeArquivos.cpp" />
 		<Unit filename="GerenciadorDeArquivos.h" />
 		<Unit filename="ItemIndiceDireto.cpp" />

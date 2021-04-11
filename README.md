@@ -2,7 +2,9 @@
 
 Projeto para estudo de indexação de arquivos em C++, utilizando como base um arquivo de dados das séries e filmes da Netflix. Exercício da disciplina de Organização e Sistemas de Arquivos (Ciência da Computação - IFNMG).
 
-Descrição detalhada do trabalho: [visualizar](./Descricao-Detalhada-do-Trabalho.pdf).
+## Parte 1
+
+Descrição detalhada da parte 1: [visualizar](./Trabalho-Parte-1.pdf).
 
 ## Licença
 
