@@ -1,4 +1,5 @@
 #include <string.h>
+#include <algorithm>
 #include "StringHelpers.h"
 
 char* strsep(char** stringp, const char* delim)
@@ -22,6 +23,11 @@ char* strsep(char** stringp, const char* delim)
     return rv;
 }
 
+std::string toLowerCase(std::string content)
+{
+    std::transform(content.begin(), content.end(), content.begin(), ::tolower);
+    return content;
+}
 
 /*
 

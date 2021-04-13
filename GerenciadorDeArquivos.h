@@ -19,6 +19,8 @@ public:
 
     /// Getter da propriedade m_nomeDoArquivoCsv.
     std::string getNomeDoArquivoCsv();
+    /// Getter da propriedade m_nomesDosArquivosDeIndices.
+    std::vector<std::string> getNomeDosArquivosDeIndices();
 
     /// Gera os arquivos de índices.
     bool gerarArquivosDeIndices();
@@ -31,6 +33,10 @@ public:
     std::vector<std::vector<ItemIndiceDireto>> obterTerceiroQuartoConjuntoDeIndices();
     /// Obtém o conjunto de índices do quinto arquivo de índices (arq_index_5).
     std::vector<ItemIndiceDireto> obterQuintoConjuntoDeIndices();
+
+    // TODO - Adicionar comentários:
+    bool atualizarArquivoDeIndices(std::vector<ItemIndiceDireto> t_novoConjuntoDeIndices, std::string t_nomeDoArquivoDeIndices);
+    bool atualizarArquivoDeIndices(std::vector<ItemIndiceIndireto> t_novoConjuntoDeIndices, std::string t_nomeDoArquivoDeIndices);
 };
 
 #endif // GERENCIADOR_ARQUIVO_H

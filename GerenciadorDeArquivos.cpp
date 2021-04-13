@@ -13,6 +13,11 @@ string GerenciadorDeArquivos::getNomeDoArquivoCsv()
     return m_nomeDoArquivoCsv;
 }
 
+vector<string> GerenciadorDeArquivos::getNomeDosArquivosDeIndices()
+{
+    return m_nomesDosArquivosDeIndices;
+}
+
 bool GerenciadorDeArquivos::gerarArquivosDeIndices()
 {
     ifstream arquivoCsv(m_nomeDoArquivoCsv);
@@ -49,6 +54,12 @@ bool GerenciadorDeArquivos::gerarArquivosDeIndices()
 
     while (getline(arquivoCsv, output))
     {
+        if (output[0] == '*')
+        {
+            posicaoAtual += (int)output.size() + 2;
+            continue;
+        }
+
         ItemNetflix itemNetflix = ItemNetflix::parseFromCsvLine(output);
 
         ItemIndiceDireto itemIndiceDireto(itemNetflix.id, posicaoAtual);
@@ -226,4 +237,34 @@ vector<ItemIndiceDireto> GerenciadorDeArquivos::obterQuintoConjuntoDeIndices()
     arquivoDeIndices.close();
 
     return conjuntoDeIndices;
+}
+
+bool GerenciadorDeArquivos::atualizarArquivoDeIndices(vector<ItemIndiceDireto> t_novoConjuntoDeIndices, string t_nomeDoArquivoDeIndices)
+{
+    ofstream arquivoDeIndices(t_nomeDoArquivoDeIndices, ios::trunc);
+
+    for (int i = 0; i < (int)t_novoConjuntoDeIndices.size(); i++)
+    {
+        if (!t_novoConjuntoDeIndices[i].escreverItemIndiceNoArquivo(arquivoDeIndices))
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool GerenciadorDeArquivos::atualizarArquivoDeIndices(vector<ItemIndiceIndireto> t_novoConjuntoDeIndices, string t_nomeDoArquivoDeIndices)
+{
+    ofstream arquivoDeIndices(t_nomeDoArquivoDeIndices, ios::trunc);
+
+    for (int i = 0; i < (int)t_novoConjuntoDeIndices.size(); i++)
+    {
+        if (!t_novoConjuntoDeIndices[i].escreverItemIndiceNoArquivo(arquivoDeIndices))
+        {
+            return false;
+        }
+    }
+
+    return true;
 }

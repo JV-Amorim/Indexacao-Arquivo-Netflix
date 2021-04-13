@@ -25,7 +25,8 @@ int main()
         cout << "MENU DE OPCOES" << endl;
         cout << "1. Pesquisar filme/serie pelo titulo;" << endl;
         cout << "2. Exibir filmes brasileiros de 2019;" << endl;
-        cout << "3. Sair;" << endl;
+        cout << "3. Remover um filme/serie pelo ID;" << endl;
+        cout << "0. Sair;" << endl;
 
         cout << "Digite o numero da opcao desejada: ";
         cin >> opcaoEscolhida;
@@ -38,11 +39,16 @@ int main()
                 break;
 
             case 2:
-                app.exibirItensBrasileirosDe2019();
+                app.exibirFilmesBrasileirosDe2019();
                 cout << endl << endl;
                 break;
 
             case 3:
+                app.removerItemPorId();
+                cout << endl << endl;
+                break;
+
+            case 0:
                 repetir = false;
                 break;
 
