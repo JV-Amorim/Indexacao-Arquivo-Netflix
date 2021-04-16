@@ -2,6 +2,7 @@
 #define ITEM_INDICE_DIRETO_H
 
 #include <string>
+#include <vector>
 #include <fstream>
 #include "ItemNetflix.h"
 
@@ -11,19 +12,42 @@ public:
     std::string idDoItemNetflix;
     int posicaoNoArquivo;
 
-    /// Construtor.
     ItemIndiceDireto(std::string m_idDoItemNetflix, int m_posicaoNoArquivo);
 
-    /// Escreve o objeto atual no arquivo aberto no ofstream passado como par‚metro.
+    /**
+     * Escreve o objeto atual no arquivo especificado.
+     * @param t_arquivoAberto O arquivo onde o ItemIndiceDireto dever√° ser escrito.
+     * @returns Se a escrita no arquivo ocorreu com sucesso.
+     */
     bool escreverItemIndiceNoArquivo(std::ofstream& t_arquivoAberto);
 
-    /// ObtÈm, de forma direta, o ItemNetflix que possui o ID correspondente ao valor da propriedade
-    /// idDoItemNetflix, utilizando a posiÁ„o em bytes no arquivo (valor da propriedade posicaoNoArquivo).
-    /// O par‚metro t_arquivoCSV trata-se do ifstream do arquivo netflix_titles.csv.
+    /**
+     * Obt√©m, de forma direta, o ItemNetflix correspondente ao ItemIndiceDireto atual.
+     * @param t_arquivoCSV O arquivo de onde o ItemNetflix ser√° obtido.
+     * @returns O ItemNetflix obtido.
+     */
     ItemNetflix obterItemNetflix(std::ifstream& t_arquivoCSV);
 
-    /// Transforma uma linha do arquivo de Ìndices em um objeto ItemIndiceDireto.
+    /**
+     * Cria um objeto ItemNetflix a partir de uma linha do arquivo de √≠ndices.
+     * @param t_conteudo Conte√∫do da linha do arquivo.
+     * @returns O ItemIndiceDireto criado.
+     */
     static ItemIndiceDireto parseFromFileLine(std::string t_conteudo);
+
+    /**
+     * Ordena um vector de ItemIndiceDireto em ordem crescente de acordo o valor da propriedade 
+     * idDoItemNetflix.
+     * @param conjuntoDeIndices O vector de ItemIndiceDireto a ser ordenado.
+     * @returns O vector de ItemIndiceDireto ordenado.
+     */
+    static std::vector<ItemIndiceDireto> ordenarConjuntoDeIndices(std::vector<ItemIndiceDireto> conjuntoDeIndices);
+
+    /**
+     * Sobrecarga do operador '<' para comparar dois objetos do tipo ItemIndiceDireto de acordo com
+     * o idDoItemNetflix de cada um.
+     */
+    bool operator < (const ItemIndiceDireto& item);
 };
 
 #endif // ITEM_INDICE_DIRETO_H

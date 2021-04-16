@@ -22,34 +22,21 @@ bool GerenciadorDeArquivos::gerarArquivosDeIndices()
 {
     ifstream arquivoCsv(m_nomeDoArquivoCsv);
 
-    ofstream arquivoDeIndices1(m_nomesDosArquivosDeIndices[0]);
-    ofstream arquivoDeIndices2(m_nomesDosArquivosDeIndices[1]);
-    ofstream arquivoDeIndices3(m_nomesDosArquivosDeIndices[2]);
-    ofstream arquivoDeIndices4(m_nomesDosArquivosDeIndices[3]);
-    ofstream arquivoDeIndices5(m_nomesDosArquivosDeIndices[4]);
-
-    bool algumArquivoFalhou =
-        arquivoCsv.fail() || arquivoDeIndices1.fail() || arquivoDeIndices2.fail()
-        || arquivoDeIndices3.fail() || arquivoDeIndices4.fail() || arquivoDeIndices5.fail();
-
-    if (algumArquivoFalhou)
+    if (arquivoCsv.fail())
     {
         cout << "ERRO -> Nao foi possivel manipular o arquivo " << m_nomeDoArquivoCsv << "." << endl;
-
         arquivoCsv.close();
-        arquivoDeIndices1.close();
-        arquivoDeIndices2.close();
-        arquivoDeIndices3.close();
-        arquivoDeIndices4.close();
-        arquivoDeIndices5.close();
-
         return false;
     }
+
+    vector<ItemIndiceDireto> conjuntoDeIndices1, conjuntoDeIndices3, conjuntoDeIndices4, conjuntoDeIndices5;
+    vector<ItemIndiceIndireto> conjuntoDeIndices2;
 
     string output;
     int posicaoAtual = 0;
 
-    getline(arquivoCsv, output);  // Header do arquivo.
+    // Header do arquivo.
+    getline(arquivoCsv, output);
     posicaoAtual += (int)output.size() + 2;
 
     while (getline(arquivoCsv, output))
@@ -61,54 +48,46 @@ bool GerenciadorDeArquivos::gerarArquivosDeIndices()
         }
 
         ItemNetflix itemNetflix = ItemNetflix::parseFromCsvLine(output);
-
         ItemIndiceDireto itemIndiceDireto(itemNetflix.id, posicaoAtual);
         ItemIndiceIndireto itemIndiceIndireto(itemNetflix.id, itemNetflix.titulo);
 
-        bool resultadoDaEscrita1 = itemIndiceDireto.escreverItemIndiceNoArquivo(arquivoDeIndices1); // arq_index_1
-        bool resultadoDaEscrita2 = itemIndiceIndireto.escreverItemIndiceNoArquivo(arquivoDeIndices2); // arq_index_2
+        conjuntoDeIndices1.push_back(itemIndiceDireto);
+        conjuntoDeIndices2.push_back(itemIndiceIndireto);
 
-        bool resultadoDaEscrita3 = true, resultadoDaEscrita4 = true;
         if (itemNetflix.tipo == "Movie")
         {
-            resultadoDaEscrita3 = itemIndiceDireto.escreverItemIndiceNoArquivo(arquivoDeIndices3); // arq_index_3
+            conjuntoDeIndices3.push_back(itemIndiceDireto);
         }
         else if (itemNetflix.tipo == "TV Show")
         {
-            resultadoDaEscrita4 = itemIndiceDireto.escreverItemIndiceNoArquivo(arquivoDeIndices4); // arq_index_4
+            conjuntoDeIndices4.push_back(itemIndiceDireto);
         }
 
-        bool resultadoDaEscrita5 = true;
         if (itemNetflix.pais.find("Brazil") != string::npos)
         {
-            resultadoDaEscrita5 = itemIndiceDireto.escreverItemIndiceNoArquivo(arquivoDeIndices5); // arq_index_5
-        }
-
-        if (!resultadoDaEscrita1 || !resultadoDaEscrita2 || !resultadoDaEscrita3 || !resultadoDaEscrita4 || !resultadoDaEscrita5)
-        {
-            cout << "ERRO -> Os arquivo de indices nao foram gerados ou ficaram incompletos." << endl;
-
-            arquivoCsv.close();
-            arquivoDeIndices1.close();
-            arquivoDeIndices2.close();
-            arquivoDeIndices3.close();
-            arquivoDeIndices4.close();
-            arquivoDeIndices5.close();
-
-            return false;
+            conjuntoDeIndices5.push_back(itemIndiceDireto);
         }
 
         posicaoAtual += (int)output.size() + 2;
     }
 
     arquivoCsv.close();
-    arquivoDeIndices1.close();
-    arquivoDeIndices2.close();
-    arquivoDeIndices3.close();
-    arquivoDeIndices4.close();
-    arquivoDeIndices5.close();
 
-    return true;
+    // Ordenação dos índices antes de gravá-los nos arquivos:
+    conjuntoDeIndices1 = ItemIndiceDireto::ordenarConjuntoDeIndices(conjuntoDeIndices1);
+    conjuntoDeIndices2 = ItemIndiceIndireto::ordenarConjuntoDeIndices(conjuntoDeIndices2);
+    conjuntoDeIndices3 = ItemIndiceDireto::ordenarConjuntoDeIndices(conjuntoDeIndices3);
+    conjuntoDeIndices4 = ItemIndiceDireto::ordenarConjuntoDeIndices(conjuntoDeIndices4);
+    conjuntoDeIndices5 = ItemIndiceDireto::ordenarConjuntoDeIndices(conjuntoDeIndices5);
+
+    bool resultadoFinal =
+        atualizarArquivoDeIndices(conjuntoDeIndices1, m_nomesDosArquivosDeIndices[0])
+        && atualizarArquivoDeIndices(conjuntoDeIndices2, m_nomesDosArquivosDeIndices[1])
+        && atualizarArquivoDeIndices(conjuntoDeIndices3, m_nomesDosArquivosDeIndices[2])
+        && atualizarArquivoDeIndices(conjuntoDeIndices4, m_nomesDosArquivosDeIndices[3])
+        && atualizarArquivoDeIndices(conjuntoDeIndices5, m_nomesDosArquivosDeIndices[4]);
+
+    return resultadoFinal;
 }
 
 vector<ItemIndiceDireto> GerenciadorDeArquivos::obterPrimeiroConjuntoDeIndices()

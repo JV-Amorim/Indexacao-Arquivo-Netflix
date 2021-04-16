@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string.h>
+#include <algorithm>
 #include "ItemIndiceIndireto.h"
 #include "StringHelpers.h"
 
@@ -68,4 +69,17 @@ ItemIndiceIndireto ItemIndiceIndireto::parseFromFileLine(string t_conteudo)
 
     ItemIndiceIndireto item(idDoItemNetflix, tituloDoItemNetflix);
     return item;
+}
+
+vector<ItemIndiceIndireto> ItemIndiceIndireto::ordenarConjuntoDeIndices(vector<ItemIndiceIndireto> conjuntoDeIndices)
+{
+    std::sort(conjuntoDeIndices.begin(), conjuntoDeIndices.end());
+    return conjuntoDeIndices;
+}
+
+bool ItemIndiceIndireto::operator < (const ItemIndiceIndireto& item)
+{
+    int idDoItemBase = std::stoi(idDoItemNetflix.substr(1));
+    int idDoOutroItem = std::stoi(item.idDoItemNetflix.substr(1));
+    return (idDoItemBase < idDoOutroItem);
 }

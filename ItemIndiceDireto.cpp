@@ -1,11 +1,12 @@
 #include <iostream>
 #include <string.h>
+#include <algorithm>
 #include "ItemIndiceDireto.h"
 #include "StringHelpers.h"
 
 using namespace std;
 
-// Métodos da classe ItemIndiceDireto:
+// Métodos públicos da classe ItemIndiceDireto:
 
 ItemIndiceDireto::ItemIndiceDireto(string m_idDoItemNetflix, int m_posicaoNoArquivo)
 {
@@ -51,4 +52,17 @@ ItemIndiceDireto ItemIndiceDireto::parseFromFileLine(string t_conteudo)
 
     ItemIndiceDireto item(idDoItemNetflix, posicaoNoArquivo);
     return item;
+}
+
+vector<ItemIndiceDireto> ItemIndiceDireto::ordenarConjuntoDeIndices(vector<ItemIndiceDireto> conjuntoDeIndices)
+{
+    std::sort(conjuntoDeIndices.begin(), conjuntoDeIndices.end());
+    return conjuntoDeIndices;
+}
+
+bool ItemIndiceDireto::operator < (const ItemIndiceDireto& item)
+{
+    int idDoItemBase = std::stoi(idDoItemNetflix.substr(1));
+    int idDoOutroItem = std::stoi(item.idDoItemNetflix.substr(1));
+    return (idDoItemBase < idDoOutroItem);
 }

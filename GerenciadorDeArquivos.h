@@ -14,28 +14,64 @@ private:
     const std::vector<std::string> m_nomesDosArquivosDeIndices{"arq_index_1", "arq_index_2", "arq_index_3", "arq_index_4", "arq_index_5"};
 
 public:
-    /// Construtor padr�o.
     GerenciadorDeArquivos();
 
-    /// Getter da propriedade m_nomeDoArquivoCsv.
+    /**
+     * Getter da propriedade privada m_nomeDoArquivoCsv.
+     * @returns String contendo o nome arquivo CSV.
+     */
     std::string getNomeDoArquivoCsv();
-    /// Getter da propriedade m_nomesDosArquivosDeIndices.
+    
+    /**
+     * Getter da propriedade privada m_nomesDosArquivosDeIndices.
+     * @returns Um vector de strings contendo os nomes dos arquivos de índices.
+     */
     std::vector<std::string> getNomeDosArquivosDeIndices();
 
-    /// Gera os arquivos de �ndices.
+    /**
+     * Gera os arquivos de índices.
+     * @returns Se os arquivos de índices foram gerados com sucesso.
+     */
     bool gerarArquivosDeIndices();
 
-    /// Obt�m o conjunto de �ndices do primeiro arquivo de �ndices (arq_index_1).
+    /**
+     * Obtém o conjunto de índices do primeiro arquivo de índices (arq_index_1).
+     * @returns Um vector de ItemIndiceDireto contendo o conjunto de índices.
+     */
     std::vector<ItemIndiceDireto> obterPrimeiroConjuntoDeIndices();
-    /// Obt�m o conjunto de �ndices do segundo arquivo de �ndices (arq_index_2).
+
+    /**
+     * Obtém o conjunto de índices do segundo arquivo de índices (arq_index_2).
+     * @returns Um vector de ItemIndiceIndireto contendo o conjunto de índices.
+     */
     std::vector<ItemIndiceIndireto> obterSegundoConjuntoDeIndices();
-    /// Obt�m um vector de tamanho 2 contendo o conjunto de �ndices do terceiro e quarto arquivo de �ndices (arq_index_3 e arq_index_4).
+
+    /**
+     * Obtém os conjuntos de índices do terceiro e quarto arquivo de índices (arq_index_3 e arq_index_4).
+     * @returns Um vector de vector de ItemIndiceDireto contendo os dois conjuntos de índices.
+     */
     std::vector<std::vector<ItemIndiceDireto>> obterTerceiroQuartoConjuntoDeIndices();
-    /// Obt�m o conjunto de �ndices do quinto arquivo de �ndices (arq_index_5).
+    
+    /**
+     * Obtém o conjunto de índices do quinto arquivo de índices (arq_index_5).
+     * @returns Um vector de ItemIndiceDireto contendo o conjunto de índices.
+     */
     std::vector<ItemIndiceDireto> obterQuintoConjuntoDeIndices();
 
-    // TODO - Adicionar coment�rios:
+    /**
+     * Atualiza o arquivo de índices especificado com um novo conjunto de índices diretos.
+     * @param t_novoConjuntoDeIndices Novo conjunto de índices.
+     * @param t_nomeDoArquivoDeIndices Nome do arquivo de índices a ser atualizado.
+     * @returns Se a atualização ocorreu com sucesso.
+     */
     bool atualizarArquivoDeIndices(std::vector<ItemIndiceDireto> t_novoConjuntoDeIndices, std::string t_nomeDoArquivoDeIndices);
+
+    /**
+     * Atualiza o arquivo de índices especificado com um novo conjunto de índices indiretos.
+     * @param t_novoConjuntoDeIndices Novo conjunto de índices.
+     * @param t_nomeDoArquivoDeIndices Nome do arquivo de índices a ser atualizado.
+     * @returns Se a atualização ocorreu com sucesso.
+     */
     bool atualizarArquivoDeIndices(std::vector<ItemIndiceIndireto> t_novoConjuntoDeIndices, std::string t_nomeDoArquivoDeIndices);
 };
 

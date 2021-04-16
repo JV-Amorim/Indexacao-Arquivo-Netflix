@@ -10,11 +10,18 @@ public:
     std::string id{""}, tipo{""}, titulo{""}, diretor{""}, pais{""}, dataDeAdicao{""}, anoDeLancamento{""}, classificacao{""}, duracao{""}, descricao{""};
     std::vector<std::string> elenco{}, generos{};
 
-    /// Construtor padr„o.
     ItemNetflix();
-    /// Exibe todos os dados do ItemNetflix na tela.
+    
+    /**
+     * Exibe os dados do ItemNetflix.
+     */
     void visualizarItem();
-    /// Transforma uma linha do arquivo netflix_titles.csv em um objeto ItemNetflix.
+
+    /**
+     * Cria um objeto ItemNetflix a partir de uma linha do arquivo CSV.
+     * @param t_conteudo Conte√∫do da linha do arquivo.
+     * @returns O ItemNetflix criado.
+     */
     static ItemNetflix parseFromCsvLine(std::string t_conteudo);
 };
 

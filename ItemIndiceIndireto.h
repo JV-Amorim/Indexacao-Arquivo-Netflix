@@ -12,20 +12,44 @@ class ItemIndiceIndireto
 public:
     std::string idDoItemNetflix, tituloDoItemNetflix;
 
-    /// Construtor.
     ItemIndiceIndireto(std::string idDoItemNetflix, std::string m_tituloDoItemNetflix);
 
-    /// Escreve o objeto atual no arquivo aberto no ofstream passado como par‚metro.
+    /**
+     * Escreve o objeto atual no arquivo especificado.
+     * @param t_arquivoAberto O arquivo onde o ItemIndiceIndireto dever√° ser escrito.
+     * @returns Se a escrita no arquivo ocorreu com sucesso.
+     */
     bool escreverItemIndiceNoArquivo(std::ofstream& t_arquivoAberto);
 
-    /// ObtÈm, de forma indireta, o ItemNetflix que possui o ID correspondente ao valor da propriedade
-    /// idDoItemNetflix, utilizando a posiÁ„o em bytes no arquivo (valor da propriedade posicaoNoArquivo).
-    /// O par‚metro conjuntoDeIndicesDiretos trata-se do conjunto de Ìndices direto.
-    /// O par‚metro t_arquivoCSV trata-se do ifstream do arquivo netflix_titles.csv.
+    /**
+     * Obt√©m, de forma indireta, o ItemNetflix correspondente ao ItemIndiceIndireto atual.
+     * @param conjuntoDeIndicesDiretos O conjunto de √≠ndices diretos para ser utilizado como
+     * intermedi√°rio para obter o ItemNetflix.
+     * @param t_arquivoCSV O arquivo de onde o ItemNetflix ser√° obtido.
+     * @returns O ItemNetflix obtido.
+     */
     ItemNetflix obterItemNetflix(std::vector<ItemIndiceDireto> conjuntoDeIndicesDiretos, std::ifstream& t_arquivoCSV);
 
-    /// Transforma uma linha do arquivo de Ìndices em um objeto ItemIndiceIndireto.
+    /**
+     * Cria um objeto ItemNetflix a partir de uma linha do arquivo de √≠ndices.
+     * @param t_conteudo Conte√∫do da linha do arquivo.
+     * @returns O ItemIndiceIndireto criado.
+     */
     static ItemIndiceIndireto parseFromFileLine(std::string t_conteudo);
+
+    /**
+     * Ordena um vector de ItemIndiceIndireto em ordem crescente de acordo o valor da propriedade 
+     * idDoItemNetflix.
+     * @param conjuntoDeIndices O vector de ItemIndiceIndireto a ser ordenado.
+     * @returns O vector de ItemIndiceIndireto ordenado.
+     */
+    static std::vector<ItemIndiceIndireto> ordenarConjuntoDeIndices(std::vector<ItemIndiceIndireto> conjuntoDeIndices);
+
+    /**
+     * Sobrecarga do operador '<' para comparar dois objetos do tipo ItemIndiceIndireto de acordo com
+     * o idDoItemNetflix de cada um.
+     */
+    bool operator < (const ItemIndiceIndireto& item);
 };
 
 #endif // ITEM_INDICE_INDIRETO_H

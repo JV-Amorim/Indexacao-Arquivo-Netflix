@@ -9,7 +9,7 @@
 
 using namespace std;
 
-// Métodos públicos da classe App:
+// Mï¿½todos pï¿½blicos da classe App:
 
 App::App() { }
 
@@ -89,7 +89,7 @@ void App::removerItemPorId()
         return;
     }
 
-    bool resultadoDaRemocaoDoArquivoCsv = removerItemNetflixDoArquivoCsv(posicaoDoItemNoArquivo, false);
+    bool resultadoDaRemocaoDoArquivoCsv = removerItemNetflixDoArquivoCsv(posicaoDoItemNoArquivo);
 
     if (!resultadoDaRemocaoDoArquivoCsv)
     {
@@ -102,43 +102,49 @@ void App::removerItemPorId()
 
     if (!resultadoDaRemocaoDosArquivosDeIndice)
     {
-        cout << endl << "ERRO -> Nao foi possivel manipular o arquivo os arquivos de indices. ";
-        cout << "Portanto, nao foi possivel realizar a remocao do filme/serie. ";
-        cout << "Sera necessario gerar novamente os arquivos de indice. ";
-        cout << "As alteracoes no arquivo CSV serao revertidas." << endl;
-
-        bool resultadoDaReversaoDaRemocao = removerItemNetflixDoArquivoCsv(posicaoDoItemNoArquivo, true);
-        if (!resultadoDaReversaoDaRemocao)
-        {
-            cout << endl << "ERRO -> Nao foi possivel reverter da remocao do filme/serie do arquivo CSV. ";
-            cout << "Os arquivos de indice estao inconsistentes com os dados." << endl;
-        }
-
+        cout << endl << "ERRO -> Nao foi possivel remover o ItemNetflix dos arquivos de indices. ";
+        cout << "Os arquivos de indice estao inconsistentes com o arquivo CSV. ";
+        cout << "Sera necessario gera-los novamente, reinicializando a aplicacao." << endl;
         return;
     }
 
     cout << endl << "O filme/serie foi removido com sucesso." << endl;
 }
 
-// Métodos privados da classe App:
+// Mï¿½todos privados da classe App:
 
 int App::obterPosicaoDoItemNoArquivoPeloId(string t_idDoItemNetflix)
 {
+    ItemIndiceDireto indiceComIdProcurado(t_idDoItemNetflix, -1);
     GerenciadorDeArquivos gerenciador;
     vector<ItemIndiceDireto> conjuntoIndiceDireto = gerenciador.obterPrimeiroConjuntoDeIndices();
 
-    for (int i = 0; i < (int)conjuntoIndiceDireto.size(); i++)
+    int inicio = 0;
+    int fim = ((int)conjuntoIndiceDireto.size()) - 1;
+    int meio;
+
+    while (inicio <= fim)
     {
-        if (conjuntoIndiceDireto[i].idDoItemNetflix == t_idDoItemNetflix)
+        meio = (inicio + fim) / 2;
+
+        if (indiceComIdProcurado.idDoItemNetflix == conjuntoIndiceDireto[meio].idDoItemNetflix)
         {
-            return conjuntoIndiceDireto[i].posicaoNoArquivo;
+            return conjuntoIndiceDireto[meio].posicaoNoArquivo;
+        }
+        else if (indiceComIdProcurado < conjuntoIndiceDireto[meio])
+        {
+            fim = meio - 1;
+        }
+        else
+        {
+            inicio = meio + 1;
         }
     }
 
     return -1;
 }
 
-bool App::removerItemNetflixDoArquivoCsv(int t_posicaoDoItemNoArquivo, bool t_reverterRemocao)
+bool App::removerItemNetflixDoArquivoCsv(int t_posicaoDoItemNoArquivo)
 {
     GerenciadorDeArquivos gerenciador;
     ofstream arquivoCsv(gerenciador.getNomeDoArquivoCsv(), ios::in | ios::out);
@@ -149,14 +155,8 @@ bool App::removerItemNetflixDoArquivoCsv(int t_posicaoDoItemNoArquivo, bool t_re
     }
 
     arquivoCsv.seekp(t_posicaoDoItemNoArquivo);
-    if (t_reverterRemocao)
-    {
-        arquivoCsv.write("s", 1);
-    }
-    else
-    {
-        arquivoCsv.write("*", 1);
-    }
+    arquivoCsv.write("*", 1);
+    
     arquivoCsv.close();
 
     return true;
