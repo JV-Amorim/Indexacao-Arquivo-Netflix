@@ -10,7 +10,7 @@ class ItemIndiceDireto
 {
 public:
     std::string idDoItemNetflix;
-    int posicaoNoArquivo;
+    unsigned int posicaoNoArquivo;
 
     ItemIndiceDireto(std::string m_idDoItemNetflix, int m_posicaoNoArquivo);
 
@@ -36,7 +36,7 @@ public:
     static ItemIndiceDireto parseFromFileLine(std::string t_conteudo);
 
     /**
-     * Ordena um vector de ItemIndiceDireto em ordem crescente de acordo o valor da propriedade 
+     * Ordena um vector de ItemIndiceDireto em ordem crescente de acordo o valor da propriedade
      * idDoItemNetflix.
      * @param conjuntoDeIndices O vector de ItemIndiceDireto a ser ordenado.
      * @returns O vector de ItemIndiceDireto ordenado.

@@ -26,6 +26,7 @@ int main()
         cout << "1. Pesquisar filme/serie pelo titulo;" << endl;
         cout << "2. Exibir filmes brasileiros de 2019;" << endl;
         cout << "3. Remover um filme/serie pelo ID;" << endl;
+        cout << "4. Inserir um novo filme/serie;" << endl;
         cout << "0. Sair;" << endl;
 
         cout << "Digite o numero da opcao desejada: ";
@@ -45,6 +46,11 @@ int main()
 
             case 3:
                 app.removerItemPorId();
+                cout << endl << endl;
+                break;
+
+            case 4:
+                app.inserirNovoItemNetflix();
                 cout << endl << endl;
                 break;
 

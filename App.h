@@ -1,29 +1,27 @@
 #ifndef APP_H
 #define APP_H
 
+#include "ItemNetflix.h"
+
 class App
 {
 private:
-    /**
-     * Através de busca binária, obtém a posição de um ItemNetflix no arquivo CSV.
-     * @param t_idDoItemNetflix O ID do ItemNetflix que se deseja obter a posição.
-     * @returns Um inteiro que corresponde à posição do ItemNetflix no arquivo CSV.
-     */
-    int obterPosicaoDoItemNoArquivoPeloId(std::string t_idDoItemNetflix);
-    
-    /**
-     * Remove um ItemNetflix do arquivo CSV.
-     * @param t_posicaoDoItemNoArquivo A posição do ItemNetflix no arquivo CSV.
-     * @returns Se a remoção foi realizada com sucesso.
-     */
-    bool removerItemNetflixDoArquivoCsv(int t_posicaoDoItemNoArquivo);
 
     /**
-     * Remove um ItemNetflix dos arquivos de índices.
-     * @param t_idDoItemNetflix O ID do ItemNetflix que se deseja remover dos arquivos de índices.
-     * @returns Se a remoção foi realizada com sucesso.
+     * Exibe um campo de formulário que recebe uma resposta (entrada de texto) do usuário.
+     * @param labelDoCampo Label do campo de formulário.
+     * @param outputDoCampo Output do campo de formulário, que representa o texto que o usuário
+     * digitou como resposta.
+     * @returns Se a entrada de texto passou na validação do campo de formulário.
      */
-    bool removerItemNetflixDosArquivosDeIndices(std::string t_idDoItemNetflix);
+    bool exibirCampoDeFormulario(std::string labelDoCampo, std::string& outputDoCampo);
+
+    /**
+     * Verifica se a resposta inserida por um usuário em um campo de formulário é válida.
+     * @param resposta A resposta a ser validada.
+     * @returns Se a resposta obtida no campo de formulário é válida.
+     */
+    bool validarRespostaDoCampoDeFormulario(std::string resposta);
 
 public:
     App();
@@ -45,9 +43,14 @@ public:
     void exibirFilmesBrasileirosDe2019();
 
     /**
-     * Permite ao usuário excluir um ItemNetflix cujo ID corresponda ao digitado.
+     * Exclui um ItemNetflix cujo ID corresponda ao digitado.
      */
     void removerItemPorId();
+
+    /**
+     * Insere um novo ItemNetflix ao arquivo de dados CSV.
+     */
+    void inserirNovoItemNetflix();
 };
 
 #endif // APP_H

@@ -49,6 +49,46 @@ void ItemNetflix::visualizarItem()
     cout << "Descricao: " << descricao << endl;
 }
 
+string ItemNetflix::toCsvLine()
+{
+    string line = "";
+
+    line += id + ";";
+    line += tipo + ";";
+    line += titulo + ";";
+    line += diretor + ";";
+
+    for (int i = 0; i < (int)elenco.size(); i++)
+    {
+        line += elenco[i];
+        if (i + 1 != (int)elenco.size())
+        {
+            line += ",";
+        }
+    }
+    line += ";";
+
+    line += pais + ";";
+    line += dataDeAdicao + ";";
+    line += anoDeLancamento + ";";
+    line += classificacao + ";";
+    line += duracao + ";";
+
+    for (int i = 0; i < (int)generos.size(); i++)
+    {
+        line += generos[i];
+        if (i + 1 != (int)generos.size())
+        {
+            line += ",";
+        }
+    }
+    line += ";";
+
+    line += descricao;
+
+    return line;
+}
+
 ItemNetflix ItemNetflix::parseFromCsvLine(string t_conteudo)
 {
     ItemNetflix item;

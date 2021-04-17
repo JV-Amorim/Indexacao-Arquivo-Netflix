@@ -13,6 +13,27 @@ private:
     const std::string m_nomeDoArquivoCsv{"netflix_titles.csv"};
     const std::vector<std::string> m_nomesDosArquivosDeIndices{"arq_index_1", "arq_index_2", "arq_index_3", "arq_index_4", "arq_index_5"};
 
+    /**
+     * Através de busca binária, obtém a posição de um ItemNetflix no arquivo CSV.
+     * @param t_idDoItemNetflix O ID do ItemNetflix que se deseja obter a posição.
+     * @returns Um inteiro que corresponde à posição do ItemNetflix no arquivo CSV.
+     */
+    unsigned int obterPosicaoDoItemNoArquivoPeloId(std::string t_idDoItemNetflix);
+
+    /**
+     * Remove um ItemNetflix do arquivo CSV.
+     * @param t_posicaoDoItemNoArquivo A posição do ItemNetflix no arquivo CSV.
+     * @returns Se a remoção foi realizada com sucesso.
+     */
+    bool removerItemNetflixDoArquivoCsv(int t_posicaoDoItemNoArquivo);
+
+    /**
+     * Remove um ItemNetflix dos arquivos de índices.
+     * @param t_idDoItemNetflix O ID do ItemNetflix que se deseja remover dos arquivos de índices.
+     * @returns Se a remoção foi realizada com sucesso.
+     */
+    bool removerItemNetflixDosArquivosDeIndices(std::string t_idDoItemNetflix);
+
 public:
     GerenciadorDeArquivos();
 
@@ -21,7 +42,7 @@ public:
      * @returns String contendo o nome arquivo CSV.
      */
     std::string getNomeDoArquivoCsv();
-    
+
     /**
      * Getter da propriedade privada m_nomesDosArquivosDeIndices.
      * @returns Um vector de strings contendo os nomes dos arquivos de índices.
@@ -35,28 +56,22 @@ public:
     bool gerarArquivosDeIndices();
 
     /**
-     * Obtém o conjunto de índices do primeiro arquivo de índices (arq_index_1).
+     * Obtém o conjunto de índices diretos do arquivo especificado.
+     * @param t_nomeDoArquivoDeIndices Nome do arquivo de índices.
      * @returns Um vector de ItemIndiceDireto contendo o conjunto de índices.
      */
-    std::vector<ItemIndiceDireto> obterPrimeiroConjuntoDeIndices();
-
+    std::vector<ItemIndiceDireto> obterConjuntoDeIndicesDiretos(std::string t_nomeDoArquivoDeIndices);
     /**
-     * Obtém o conjunto de índices do segundo arquivo de índices (arq_index_2).
+     * Obtém o conjunto de índices indiretos do arquivo especificado.
+     * @param t_nomeDoArquivoDeIndices Nome do arquivo de índices.
      * @returns Um vector de ItemIndiceIndireto contendo o conjunto de índices.
      */
-    std::vector<ItemIndiceIndireto> obterSegundoConjuntoDeIndices();
+    std::vector<ItemIndiceIndireto> obterConjuntoDeIndicesIndiretos(std::string t_nomeDoArquivoDeIndices);
 
     /**
-     * Obtém os conjuntos de índices do terceiro e quarto arquivo de índices (arq_index_3 e arq_index_4).
-     * @returns Um vector de vector de ItemIndiceDireto contendo os dois conjuntos de índices.
+     * Encontra todos os ItemNetflix cujo título corresponda, completamente ou parcialmente, ao termo digitado.
      */
-    std::vector<std::vector<ItemIndiceDireto>> obterTerceiroQuartoConjuntoDeIndices();
-    
-    /**
-     * Obtém o conjunto de índices do quinto arquivo de índices (arq_index_5).
-     * @returns Um vector de ItemIndiceDireto contendo o conjunto de índices.
-     */
-    std::vector<ItemIndiceDireto> obterQuintoConjuntoDeIndices();
+    std::vector<ItemNetflix> buscarItemNetflixPorTitulo(std::string t_titulo);
 
     /**
      * Atualiza o arquivo de índices especificado com um novo conjunto de índices diretos.
@@ -73,6 +88,24 @@ public:
      * @returns Se a atualização ocorreu com sucesso.
      */
     bool atualizarArquivoDeIndices(std::vector<ItemIndiceIndireto> t_novoConjuntoDeIndices, std::string t_nomeDoArquivoDeIndices);
+
+    /**
+     * Remove um ItemNetflix do arquivo CSV e atualiza os arquivos de índices.
+     * @param t_idDoItemNetflix O ID do ItemNetflix que se deseja remover.
+     */
+    void removerItemNetflix(std::string t_idDoItemNetflix);
+
+    /**
+     * Insere um novo ItemNetflix no arquivo CSV e atualiza os arquivos de índices.
+     * @param itemNetflix O objeto contendo os dados a serem inseridos no arquivo.
+     */
+    void inserirItemNetflix(ItemNetflix itemNetflix);
+
+    /**
+     * Obtém o ID do próximo ItemNetflix a ser inserido (incrementando o ID do último item no arquivo).
+     * @return O ID obtido para o próximo item.
+     */
+    std::string obterIdDoProximoItemNetflix();
 };
 
 #endif // GERENCIADOR_ARQUIVO_H

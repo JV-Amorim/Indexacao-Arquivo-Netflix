@@ -48,7 +48,7 @@ ItemIndiceDireto ItemIndiceDireto::parseFromFileLine(string t_conteudo)
     char* copiaDoConteudo = _strdup(t_conteudo.c_str());
 
     string idDoItemNetflix = strsep(&copiaDoConteudo, ";");
-    int posicaoNoArquivo = stoi(strsep(&copiaDoConteudo, ";"));
+    unsigned int posicaoNoArquivo = stoi(strsep(&copiaDoConteudo, ";"));
 
     ItemIndiceDireto item(idDoItemNetflix, posicaoNoArquivo);
     return item;
@@ -62,7 +62,7 @@ vector<ItemIndiceDireto> ItemIndiceDireto::ordenarConjuntoDeIndices(vector<ItemI
 
 bool ItemIndiceDireto::operator < (const ItemIndiceDireto& item)
 {
-    int idDoItemBase = std::stoi(idDoItemNetflix.substr(1));
-    int idDoOutroItem = std::stoi(item.idDoItemNetflix.substr(1));
+    unsigned int idDoItemBase = std::stoi(idDoItemNetflix.substr(1));
+    unsigned int idDoOutroItem = std::stoi(item.idDoItemNetflix.substr(1));
     return (idDoItemBase < idDoOutroItem);
 }

@@ -11,11 +11,17 @@ public:
     std::vector<std::string> elenco{}, generos{};
 
     ItemNetflix();
-    
+
     /**
      * Exibe os dados do ItemNetflix.
      */
     void visualizarItem();
+
+    /**
+     * Cria uma string em formato CSV contendo todos os dados do ItemNetflix atual.
+     * @returns A string em formato CSV criada.
+     */
+    std::string toCsvLine();
 
     /**
      * Cria um objeto ItemNetflix a partir de uma linha do arquivo CSV.

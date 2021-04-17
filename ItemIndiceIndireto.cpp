@@ -28,7 +28,7 @@ bool ItemIndiceIndireto::escreverItemIndiceNoArquivo(ofstream& t_arquivoAberto)
 
 ItemNetflix ItemIndiceIndireto::obterItemNetflix(vector<ItemIndiceDireto> conjuntoDeIndicesDiretos, ifstream& t_arquivoCSV)
 {
-    int posicaoNoArquivo = -1;
+    unsigned int posicaoNoArquivo;
 
     if (t_arquivoCSV.fail())
     {
@@ -36,7 +36,7 @@ ItemNetflix ItemIndiceIndireto::obterItemNetflix(vector<ItemIndiceDireto> conjun
         return {};
     }
 
-    for (int i = 0; i < (int)conjuntoDeIndicesDiretos.size(); i++)
+    for (unsigned int i = 0; i < (unsigned int)conjuntoDeIndicesDiretos.size(); i++)
     {
         if (conjuntoDeIndicesDiretos[i].idDoItemNetflix == idDoItemNetflix)
         {
@@ -79,7 +79,7 @@ vector<ItemIndiceIndireto> ItemIndiceIndireto::ordenarConjuntoDeIndices(vector<I
 
 bool ItemIndiceIndireto::operator < (const ItemIndiceIndireto& item)
 {
-    int idDoItemBase = std::stoi(idDoItemNetflix.substr(1));
-    int idDoOutroItem = std::stoi(item.idDoItemNetflix.substr(1));
+    unsigned int idDoItemBase = std::stoi(idDoItemNetflix.substr(1));
+    unsigned int idDoOutroItem = std::stoi(item.idDoItemNetflix.substr(1));
     return (idDoItemBase < idDoOutroItem);
 }
