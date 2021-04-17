@@ -34,6 +34,23 @@ private:
      */
     bool removerItemNetflixDosArquivosDeIndices(std::string t_idDoItemNetflix);
 
+    /**
+     * Insere um ItemNetflix nos arquivos de índices, verificando os arquivos onde o item deve ser
+     * inserido.
+     * @param t_itemNetflix O ItemNetflix a ser inserido.
+     * @param t_posicaoDoItemNoArquivoCsv A posição do ItemNetflix no arquivo CSV.
+     * @returns Se a inserção foi realizada com sucesso.
+     */
+    bool adicionarItemNetflixAosArquivosDeIndices(ItemNetflix t_itemNetflix, unsigned int t_posicaoDoItemNoArquivoCsv);
+
+    /**
+     * Procura um espaço disponível no arquivo CSV (onde itens anteriores foram excluídos) e insere
+     * o ItemNetflix nesse espaço, se o ItemNetflix couber no espaço.
+     * @param t_itemNetflix O ItemNetflix a ser inserido.
+     * @returns Se o ItemNetflix foi inserido em algum espaço disponível no meio do arquivo.
+     */
+    bool tentarInsercaoDeItemNetflixEmEspacoDisponivel(ItemNetflix t_itemNetflix);
+
 public:
     GerenciadorDeArquivos();
 
@@ -96,16 +113,16 @@ public:
     void removerItemNetflix(std::string t_idDoItemNetflix);
 
     /**
-     * Insere um novo ItemNetflix no arquivo CSV e atualiza os arquivos de índices.
-     * @param itemNetflix O objeto contendo os dados a serem inseridos no arquivo.
-     */
-    void inserirItemNetflix(ItemNetflix itemNetflix);
-
-    /**
      * Obtém o ID do próximo ItemNetflix a ser inserido (incrementando o ID do último item no arquivo).
      * @return O ID obtido para o próximo item.
      */
     std::string obterIdDoProximoItemNetflix();
+
+    /**
+     * Insere um novo ItemNetflix no arquivo CSV e atualiza os arquivos de índices.
+     * @param itemNetflix O objeto contendo os dados a serem inseridos no arquivo.
+     */
+    void inserirItemNetflix(ItemNetflix t_itemNetflix);
 };
 
 #endif // GERENCIADOR_ARQUIVO_H

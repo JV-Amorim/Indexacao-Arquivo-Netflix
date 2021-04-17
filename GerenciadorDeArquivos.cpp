@@ -74,7 +74,6 @@ bool GerenciadorDeArquivos::gerarArquivosDeIndices()
 
     arquivoCsv.close();
 
-    // Ordenação dos índices antes de gravá-los nos arquivos:
     conjuntoDeIndices1 = ItemIndiceDireto::ordenarConjuntoDeIndices(conjuntoDeIndices1);
     conjuntoDeIndices2 = ItemIndiceIndireto::ordenarConjuntoDeIndices(conjuntoDeIndices2);
     conjuntoDeIndices3 = ItemIndiceDireto::ordenarConjuntoDeIndices(conjuntoDeIndices3);
@@ -227,77 +226,13 @@ void GerenciadorDeArquivos::removerItemNetflix(string t_idDoItemNetflix)
 
     if (!resultadoDaRemocaoDosArquivosDeIndice)
     {
-        cout << endl << "ERRO -> Nao foi possivel remover o ItemNetflix dos arquivos de indices. ";
+        cout << "ERRO -> Nao foi possivel remover o ItemNetflix dos arquivos de indices. ";
         cout << "Os arquivos de indice estao inconsistentes com o arquivo CSV. ";
         cout << "Sera necessario gera-los novamente, reinicializando a aplicacao." << endl;
         return;
     }
 
     cout << endl << "O filme/serie foi removido com sucesso." << endl;
-}
-
-void GerenciadorDeArquivos::inserirItemNetflix(ItemNetflix itemNetflix)
-{
-    // Inserindo no final do arquivo:
-
-    ofstream arquivoCsv(m_nomeDoArquivoCsv, ios::app);
-
-    if (arquivoCsv.fail())
-    {
-        cout << "ERRO -> Nao foi possivel manipular o arquivo " << m_nomeDoArquivoCsv << "." << endl;
-        return;
-    }
-
-    string itemNetflixString = itemNetflix.toCsvLine();
-    arquivoCsv << itemNetflixString << endl;
-
-    unsigned int posicaoDoItemNetflix = ((unsigned int)arquivoCsv.tellp()) - itemNetflixString.size() - 2;
-
-    ItemIndiceDireto itemIndiceDireto(itemNetflix.id, posicaoDoItemNetflix);
-    ItemIndiceIndireto itemIndiceIndireto(itemNetflix.id, itemNetflix.titulo);
-
-    ofstream arqIndices1(m_nomesDosArquivosDeIndices[0], ios::app);
-    ofstream arqIndices2(m_nomesDosArquivosDeIndices[1], ios::app);
-    ofstream arqIndices3(m_nomesDosArquivosDeIndices[2], ios::app);
-    ofstream arqIndices4(m_nomesDosArquivosDeIndices[3], ios::app);
-    ofstream arqIndices5(m_nomesDosArquivosDeIndices[4], ios::app);
-
-    if (arqIndices1.fail() || arqIndices2.fail() || arqIndices3.fail() || arqIndices4.fail() || arqIndices5.fail())
-    {
-        cout << "ERRO -> Nao foi possivel manipular um ou mais arquivos de índices." << endl;
-        return;
-    }
-
-    itemIndiceDireto.escreverItemIndiceNoArquivo(arqIndices1);
-    itemIndiceIndireto.escreverItemIndiceNoArquivo(arqIndices2);
-
-    if (itemNetflix.tipo == "Movie")
-    {
-        itemIndiceDireto.escreverItemIndiceNoArquivo(arqIndices3);
-    }
-    else if (itemNetflix.tipo == "TV Show")
-    {
-        itemIndiceDireto.escreverItemIndiceNoArquivo(arqIndices4);
-    }
-
-    if (itemNetflix.pais.find("Brazil") != string::npos)
-    {
-        itemIndiceDireto.escreverItemIndiceNoArquivo(arqIndices5);
-    }
-
-    arqIndices1.close();
-    arqIndices2.close();
-    arqIndices3.close();
-    arqIndices4.close();
-    arqIndices5.close();
-    arquivoCsv.close();
-
-    cout << endl << "O novo filme/serie foi inserido com sucesso." << endl;
-
-    // TODO - Antes de adicionar no final do arquivo, será necessário verificar se é possível
-    // inserir o ItemNetflix em algum lugar no meio do arquivo onde outro item foi apagado.
-    // Caso seja possível inserir em algum lugar no meio do arquivo, o código acima não deve
-    // ser executado (adicionar um IF).
 }
 
 string GerenciadorDeArquivos::obterIdDoProximoItemNetflix()
@@ -314,6 +249,40 @@ string GerenciadorDeArquivos::obterIdDoProximoItemNetflix()
     idDoUltimoItem++;
 
     return "s" + to_string(idDoUltimoItem);
+}
+
+void GerenciadorDeArquivos::inserirItemNetflix(ItemNetflix t_itemNetflix)
+{
+    bool resultadoDaInsercaoEmEspacoDisponivel = tentarInsercaoDeItemNetflixEmEspacoDisponivel(t_itemNetflix);
+
+    if (!resultadoDaInsercaoEmEspacoDisponivel)
+    {
+         ofstream arquivoCsv(m_nomeDoArquivoCsv, ios::app);
+
+        if (arquivoCsv.fail())
+        {
+            cout << "ERRO -> Nao foi possivel manipular o arquivo " << m_nomeDoArquivoCsv << "." << endl;
+            return;
+        }
+
+        string itemNetflixString = t_itemNetflix.toCsvLine();
+        arquivoCsv << itemNetflixString << endl;
+
+        unsigned int posicaoDoItemNoArquivoCsv = ((unsigned int)arquivoCsv.tellp()) - itemNetflixString.size() - 2;
+        bool resultadoDaAtualizacaoDosIndices = adicionarItemNetflixAosArquivosDeIndices(t_itemNetflix, posicaoDoItemNoArquivoCsv);
+
+        if(!resultadoDaAtualizacaoDosIndices)
+        {
+            cout << "ERRO -> Os arquivos de indice estao inconsistentes com o arquivo CSV. ";
+            cout << "Sera necessario gera-los novamente, reinicializando a aplicacao." << endl;
+            arquivoCsv.close();
+            return;
+        }
+
+        arquivoCsv.close();
+    }
+
+    cout << endl << "O novo filme/serie foi inserido com sucesso." << endl;
 }
 
 // Métodos privados da classe GerenciadorDeArquivos:
@@ -404,4 +373,109 @@ bool GerenciadorDeArquivos::removerItemNetflixDosArquivosDeIndices(string t_idDo
     }
 
     return resultadoFinal;
+}
+
+bool GerenciadorDeArquivos::adicionarItemNetflixAosArquivosDeIndices(ItemNetflix t_itemNetflix, unsigned int t_posicaoDoItemNoArquivoCsv)
+{
+    ItemIndiceDireto itemIndiceDireto(t_itemNetflix.id, t_posicaoDoItemNoArquivoCsv);
+    ItemIndiceIndireto itemIndiceIndireto(t_itemNetflix.id, t_itemNetflix.titulo);
+
+    ofstream arqIndices1(m_nomesDosArquivosDeIndices[0], ios::app);
+    ofstream arqIndices2(m_nomesDosArquivosDeIndices[1], ios::app);
+    ofstream arqIndices3(m_nomesDosArquivosDeIndices[2], ios::app);
+    ofstream arqIndices4(m_nomesDosArquivosDeIndices[3], ios::app);
+    ofstream arqIndices5(m_nomesDosArquivosDeIndices[4], ios::app);
+
+    if (arqIndices1.fail() || arqIndices2.fail() || arqIndices3.fail() || arqIndices4.fail() || arqIndices5.fail())
+    {
+        cout << "ERRO -> Nao foi possivel manipular um ou mais arquivos de índices." << endl;
+        return false;
+    }
+
+    itemIndiceDireto.escreverItemIndiceNoArquivo(arqIndices1);
+    itemIndiceIndireto.escreverItemIndiceNoArquivo(arqIndices2);
+
+    if (t_itemNetflix.tipo == "Movie")
+    {
+        itemIndiceDireto.escreverItemIndiceNoArquivo(arqIndices3);
+    }
+    else if (t_itemNetflix.tipo == "TV Show")
+    {
+        itemIndiceDireto.escreverItemIndiceNoArquivo(arqIndices4);
+    }
+
+    if (t_itemNetflix.pais.find("Brazil") != string::npos)
+    {
+        itemIndiceDireto.escreverItemIndiceNoArquivo(arqIndices5);
+    }
+
+    arqIndices1.close();
+    arqIndices2.close();
+    arqIndices3.close();
+    arqIndices4.close();
+    arqIndices5.close();
+
+    return true;
+}
+
+bool GerenciadorDeArquivos::tentarInsercaoDeItemNetflixEmEspacoDisponivel(ItemNetflix t_itemNetflix)
+{
+    fstream arquivoCsv(m_nomeDoArquivoCsv);
+
+    if (arquivoCsv.fail())
+    {
+        cout << "ERRO -> Nao foi possivel manipular o arquivo " << m_nomeDoArquivoCsv << "." << endl;
+        return false;
+    }
+
+    string output;
+    unsigned int posicaoVerificacao = 0;
+
+    getline(arquivoCsv, output);
+    posicaoVerificacao += (unsigned int)output.size() + 2;
+
+    string itemNetflixString = t_itemNetflix.toCsvLine();
+    unsigned int tamanhoItemNetflixString = (unsigned int)itemNetflixString.size();
+    bool espacoDisponivel = false;
+
+    while(getline(arquivoCsv, output))
+    {
+        unsigned int tamanhoOutput = (unsigned int)output.size();
+        if ((output[0] == '*') && (tamanhoItemNetflixString <= tamanhoOutput))
+        {
+            espacoDisponivel = true;
+            break;
+        }
+        posicaoVerificacao += (unsigned int)output.size() + 2;
+    }
+
+    if (!espacoDisponivel)
+    {
+        return false;
+    }
+
+    arquivoCsv.seekp(posicaoVerificacao, ios::beg);
+    arquivoCsv << itemNetflixString;
+
+    unsigned int espacoEmBranco = (unsigned int)output.size() - tamanhoItemNetflixString;
+    for(unsigned int i = 0; i < espacoEmBranco; i++)
+    {
+        arquivoCsv.write(" ", 1);
+    }
+    cout << endl;
+
+    unsigned int posicaoDoItemNoArquivoCsv = ((unsigned int)arquivoCsv.tellp()) - itemNetflixString.size() - espacoEmBranco;
+    bool resultadoDaAtualizacaoDosIndices = adicionarItemNetflixAosArquivosDeIndices(t_itemNetflix, posicaoDoItemNoArquivoCsv);
+
+    if(!resultadoDaAtualizacaoDosIndices)
+    {
+        cout << "ERRO -> Os arquivos de indice estao inconsistentes com o arquivo CSV. ";
+        cout << "Sera necessario gera-los novamente, reinicializando a aplicacao." << endl;
+        arquivoCsv.close();
+        return false;
+    }
+
+    arquivoCsv.close();
+
+    return true;
 }
