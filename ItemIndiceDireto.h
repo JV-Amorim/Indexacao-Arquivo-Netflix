@@ -1,6 +1,8 @@
 #ifndef ITEM_INDICE_DIRETO_H
 #define ITEM_INDICE_DIRETO_H
 
+#pragma once
+
 #include <string>
 #include <vector>
 #include <fstream>
@@ -9,10 +11,11 @@
 class ItemIndiceDireto
 {
 public:
-    std::string idDoItemNetflix;
-    unsigned int posicaoNoArquivo;
+    unsigned int idDoItemNetflix, posicaoNoArquivo;
 
     ItemIndiceDireto(std::string m_idDoItemNetflix, int m_posicaoNoArquivo);
+
+    ItemIndiceDireto(int m_idDoItemNetflix, int m_posicaoNoArquivo);
 
     /**
      * Escreve o objeto atual no arquivo especificado.

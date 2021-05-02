@@ -34,6 +34,8 @@
 		</Compiler>
 		<Unit filename="App.cpp" />
 		<Unit filename="App.h" />
+		<Unit filename="BTree.cpp" />
+		<Unit filename="BTree.h" />
 		<Unit filename="GerenciadorDeArquivos.cpp" />
 		<Unit filename="GerenciadorDeArquivos.h" />
 		<Unit filename="ItemIndiceDireto.cpp" />

@@ -2,6 +2,7 @@
 #include <fstream>
 #include "GerenciadorDeArquivos.h"
 #include "StringHelpers.h"
+#include "BTree.h"
 
 using namespace std;
 
@@ -245,7 +246,7 @@ string GerenciadorDeArquivos::obterIdDoProximoItemNetflix()
     }
 
     ItemIndiceDireto ultimoItem = conjuntoIndicesDireto[conjuntoIndicesDireto.size() - 1];
-    unsigned int idDoUltimoItem = std::stoi(ultimoItem.idDoItemNetflix.substr(1));
+    unsigned int idDoUltimoItem = ultimoItem.idDoItemNetflix;
     idDoUltimoItem++;
 
     return "s" + to_string(idDoUltimoItem);
@@ -351,7 +352,9 @@ bool GerenciadorDeArquivos::removerItemNetflixDosArquivosDeIndices(string t_idDo
 
         for (unsigned int j = 0; j < (unsigned int)conjuntoAtual.size(); j++)
         {
-            if (conjuntoAtual[j].idDoItemNetflix == t_idDoItemNetflix)
+            string idDoItemAtual = "s" + to_string(conjuntoAtual[j].idDoItemNetflix);
+
+            if (idDoItemAtual == t_idDoItemNetflix)
             {
                 conjuntoAtual.erase(conjuntoAtual.begin() + j);
                 resultadoFinal = atualizarArquivoDeIndices(conjuntoAtual, m_nomesDosArquivosDeIndices[i]);

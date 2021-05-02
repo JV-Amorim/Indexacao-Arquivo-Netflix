@@ -38,7 +38,9 @@ ItemNetflix ItemIndiceIndireto::obterItemNetflix(vector<ItemIndiceDireto> conjun
 
     for (unsigned int i = 0; i < (unsigned int)conjuntoDeIndicesDiretos.size(); i++)
     {
-        if (conjuntoDeIndicesDiretos[i].idDoItemNetflix == idDoItemNetflix)
+        string idDoItemAtual = "s" + to_string(conjuntoDeIndicesDiretos[i].idDoItemNetflix);
+
+        if (idDoItemAtual == idDoItemNetflix)
         {
             posicaoNoArquivo = conjuntoDeIndicesDiretos[i].posicaoNoArquivo;
             break;

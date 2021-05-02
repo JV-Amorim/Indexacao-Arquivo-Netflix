@@ -4,7 +4,7 @@
 
 using namespace std;
 
-/// Alunos: João Vitor Amorim e Thiago Riquelmo.
+// Alunos: João Vitor Amorim e Thiago Riquelmo.
 
 int main()
 {
