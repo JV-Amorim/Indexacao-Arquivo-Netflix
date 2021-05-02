@@ -8,6 +8,10 @@
  * Repository: https://github.com/CalebLBaker/b-tree
  */
 
+
+#ifndef BTREE_H
+#define BTREE_H
+
 #include <utility>
 #include "ItemIndiceDireto.h"
 
@@ -96,3 +100,5 @@ private:
 	// Minimum degree of the tree.
 	unsigned int minDegree;
 };
+
+#endif // BTREE_H

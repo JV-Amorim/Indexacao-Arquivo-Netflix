@@ -33,6 +33,16 @@ public:
     bool inicializarAplicacao();
 
     /**
+     * Insere um novo ItemNetflix ao arquivo de dados CSV.
+     */
+    void inserirNovoItemNetflix();
+
+    /**
+     * Exclui um ItemNetflix cujo ID corresponda ao digitado.
+     */
+    void removerItemPorId();
+
+    /**
      * Encontra todos os ItemNetflix cujo título corresponde ao termo digitado.
      */
     void pesquisarItensPorTitulo();
@@ -43,14 +53,29 @@ public:
     void exibirFilmesBrasileirosDe2019();
 
     /**
-     * Exclui um ItemNetflix cujo ID corresponda ao digitado.
+     * Exibe todos os filmes e séries destinados à toda a família.
      */
-    void removerItemPorId();
+    void exibirFilmesSeriesParaFamilia();
 
     /**
-     * Insere um novo ItemNetflix ao arquivo de dados CSV.
+     * Exibe todos os filmes e séries com a temática de artes marciais.
      */
-    void inserirNovoItemNetflix();
+    void exibirFilmesSeriesComTematicaDeArtesMarciais();
+
+    /**
+     * Exibe todos os filmes que possuam o ator Leonardo DiCaprio no elenco.
+     */
+    void exibirFilmesComAtorLeonardoDiCaprio();
+
+    /**
+     * Exibe todos os filmes que possuam Steven Spielberg como diretor.
+     */
+    void exibirFilmesDirigidosPorStevenSpielberg();
+
+    /**
+     * Exibe todos os filmes documentais com duração superior a duas horas.
+     */
+    void exibirFilmesDocumentaisComMaisDeDuasHoras();
 };
 
 #endif // APP_H

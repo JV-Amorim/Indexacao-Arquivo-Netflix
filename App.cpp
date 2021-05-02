@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 #include "string.h"
 #include "App.h"
 #include "ItemNetflix.h"
@@ -18,63 +19,6 @@ bool App::inicializarAplicacao()
 {
     GerenciadorDeArquivos gerenciador;
     return gerenciador.gerarArquivosDeIndices();
-}
-
-void App::pesquisarItensPorTitulo()
-{
-    string titulo = "";
-    cout << endl << "Digite o titulo do filme/serie que deseja encontrar: ";
-    cin >> titulo;
-
-    GerenciadorDeArquivos gerenciador;
-    vector<ItemNetflix> itensEncontrados = gerenciador.buscarItemNetflixPorTitulo(titulo);
-
-    cout << endl << "- Resultado da pesquisa:" << endl << endl;
-
-    if (itensEncontrados.size() == 0)
-    {
-        cout << "Nenhum filme/serie encontrado com esse titulo." << endl;
-        return;
-    }
-
-    for (unsigned int i = 0; i < (unsigned int)itensEncontrados.size(); i++)
-    {
-        itensEncontrados[i].visualizarItem();
-        cout << endl;
-    }
-}
-
-void App::exibirFilmesBrasileirosDe2019()
-{
-    GerenciadorDeArquivos gerenciador;
-    string nomeDoArquivoDeIndices = gerenciador.getNomeDosArquivosDeIndices()[4];
-    vector<ItemIndiceDireto> conjuntoIndiceDireto = gerenciador.obterConjuntoDeIndicesDiretos(nomeDoArquivoDeIndices);
-    ifstream arquivoCsv(gerenciador.getNomeDoArquivoCsv());
-
-    cout << endl << "- Lista de filmes brasileiros do ano de 2019:" << endl << endl;
-
-    for (unsigned int i = 0; i < (unsigned int)conjuntoIndiceDireto.size(); i++)
-    {
-        ItemNetflix itemNetflix = conjuntoIndiceDireto[i].obterItemNetflix(arquivoCsv);
-
-        if ((itemNetflix.tipo == "Movie") && (itemNetflix.anoDeLancamento == "2019"))
-        {
-            itemNetflix.visualizarItem();
-            cout << endl;
-        }
-    }
-}
-
-void App::removerItemPorId()
-{
-    string idDoItemNetflix;
-
-    cout << endl << "Digite o ID do filme/serie que deseja remover: s";
-    cin >> idDoItemNetflix;
-    idDoItemNetflix = "s" + idDoItemNetflix;
-
-    GerenciadorDeArquivos gerenciador;
-    gerenciador.removerItemNetflix(idDoItemNetflix);
 }
 
 void App::inserirNovoItemNetflix()
@@ -157,6 +101,184 @@ void App::inserirNovoItemNetflix()
     if (!resultado) return;
 
     gerenciador.inserirItemNetflix(itemNetflix);
+}
+
+void App::removerItemPorId()
+{
+    string idDoItemNetflix;
+
+    cout << endl << "Digite o ID do filme/serie que deseja remover: s";
+    cin >> idDoItemNetflix;
+    idDoItemNetflix = "s" + idDoItemNetflix;
+
+    GerenciadorDeArquivos gerenciador;
+    gerenciador.removerItemNetflix(idDoItemNetflix);
+}
+
+void App::pesquisarItensPorTitulo()
+{
+    string titulo = "";
+    cout << endl << "Digite o titulo do filme/serie que deseja encontrar: ";
+    cin >> titulo;
+
+    GerenciadorDeArquivos gerenciador;
+    vector<ItemNetflix> itensEncontrados = gerenciador.buscarItemNetflixPorTitulo(titulo);
+
+    cout << endl << "- Resultado da pesquisa:" << endl << endl;
+
+    if (itensEncontrados.size() == 0)
+    {
+        cout << "Nenhum filme/serie encontrado com esse titulo." << endl;
+        return;
+    }
+
+    for (unsigned int i = 0; i < (unsigned int)itensEncontrados.size(); i++)
+    {
+        itensEncontrados[i].visualizarItem();
+        cout << endl;
+    }
+}
+
+void App::exibirFilmesBrasileirosDe2019()
+{
+    GerenciadorDeArquivos gerenciador;
+    string nomeDoArquivoDeIndices = gerenciador.getNomeDosArquivosDeIndices()[4];
+    vector<ItemIndiceDireto> conjuntoIndiceDireto = gerenciador.obterConjuntoDeIndicesDiretos(nomeDoArquivoDeIndices);
+    ifstream arquivoCsv(gerenciador.getNomeDoArquivoCsv());
+
+    cout << endl << "- Lista de filmes brasileiros do ano de 2019:" << endl << endl;
+
+    for (unsigned int i = 0; i < (unsigned int)conjuntoIndiceDireto.size(); i++)
+    {
+        ItemNetflix itemNetflix = conjuntoIndiceDireto[i].obterItemNetflix(arquivoCsv);
+
+        if ((itemNetflix.tipo == "Movie") && (itemNetflix.anoDeLancamento == "2019"))
+        {
+            itemNetflix.visualizarItem();
+            cout << endl;
+        }
+    }
+}
+
+void App::exibirFilmesSeriesParaFamilia()
+{
+    GerenciadorDeArquivos gerenciador;
+    string nomeDoArquivoDeIndices = gerenciador.getNomeDosArquivosDeIndices()[0];
+    vector<ItemIndiceDireto> conjuntoIndiceDireto = gerenciador.obterConjuntoDeIndicesDiretos(nomeDoArquivoDeIndices);
+    ifstream arquivoCsv(gerenciador.getNomeDoArquivoCsv());
+
+    cout << endl << "- Lista dos filmes e series para toda a familia:" << endl << endl;
+
+    for (unsigned int i = 0; i < (unsigned int)conjuntoIndiceDireto.size(); i++)
+    {
+        ItemNetflix itemNetflix = conjuntoIndiceDireto[i].obterItemNetflix(arquivoCsv);
+
+        for (unsigned int j = 0; j < (unsigned int)itemNetflix.generos.size(); j++)
+        {
+            if (toLowerCase(itemNetflix.generos[j]).find("family") != string::npos)
+            {
+                itemNetflix.visualizarItem();
+                cout << endl;
+            }
+        }
+    }
+}
+
+void App::exibirFilmesSeriesComTematicaDeArtesMarciais()
+{
+    GerenciadorDeArquivos gerenciador;
+    string nomeDoArquivoDeIndices = gerenciador.getNomeDosArquivosDeIndices()[0];
+    vector<ItemIndiceDireto> conjuntoIndiceDireto = gerenciador.obterConjuntoDeIndicesDiretos(nomeDoArquivoDeIndices);
+    ifstream arquivoCsv(gerenciador.getNomeDoArquivoCsv());
+
+    cout << endl << "- Lista dos filmes e series com tematica de artes marciais:" << endl << endl;
+
+    for (unsigned int i = 0; i < (unsigned int)conjuntoIndiceDireto.size(); i++)
+    {
+        ItemNetflix itemNetflix = conjuntoIndiceDireto[i].obterItemNetflix(arquivoCsv);
+
+        if (itemNetflix.descricao.find("martial arts") != string::npos)
+        {
+            itemNetflix.visualizarItem();
+            cout << endl;
+        }
+    }
+}
+
+void App::exibirFilmesComAtorLeonardoDiCaprio()
+{
+
+    GerenciadorDeArquivos gerenciador;
+    string nomeDoArquivoDeIndices = gerenciador.getNomeDosArquivosDeIndices()[0];
+    vector<ItemIndiceDireto> conjuntoIndiceDireto = gerenciador.obterConjuntoDeIndicesDiretos(nomeDoArquivoDeIndices);
+    ifstream arquivoCsv(gerenciador.getNomeDoArquivoCsv());
+
+    cout << endl << "- Lista dos filmes com o ator LeonardoDiCaprio:" << endl << endl;
+
+    for (unsigned int i = 0; i < (unsigned int)conjuntoIndiceDireto.size(); i++)
+    {
+        ItemNetflix itemNetflix = conjuntoIndiceDireto[i].obterItemNetflix(arquivoCsv);
+
+        for (unsigned int j = 0; j < (unsigned int)itemNetflix.elenco.size(); j++)
+        {
+            if (itemNetflix.tipo == "Movie" && toLowerCase(itemNetflix.elenco[j]).find("leonardo dicaprio") != string::npos)
+            {
+                itemNetflix.visualizarItem();
+                cout << endl;
+            }
+        }
+    }
+}
+
+void App::exibirFilmesDirigidosPorStevenSpielberg()
+{
+    GerenciadorDeArquivos gerenciador;
+    string nomeDoArquivoDeIndices = gerenciador.getNomeDosArquivosDeIndices()[0];
+    vector<ItemIndiceDireto> conjuntoIndiceDireto = gerenciador.obterConjuntoDeIndicesDiretos(nomeDoArquivoDeIndices);
+    ifstream arquivoCsv(gerenciador.getNomeDoArquivoCsv());
+
+    cout << endl << "- Lista dos filmes dirigidos por Steven Spielberg:" << endl << endl;
+
+    for (unsigned int i = 0; i < (unsigned int)conjuntoIndiceDireto.size(); i++)
+    {
+        ItemNetflix itemNetflix = conjuntoIndiceDireto[i].obterItemNetflix(arquivoCsv);
+
+        if (itemNetflix.diretor == "Steven Spielberg")
+        {
+            itemNetflix.visualizarItem();
+            cout << endl;
+        }
+    }
+}
+
+void App::exibirFilmesDocumentaisComMaisDeDuasHoras()
+{
+GerenciadorDeArquivos gerenciador;
+    string nomeDoArquivoDeIndices = gerenciador.getNomeDosArquivosDeIndices()[0];
+    vector<ItemIndiceDireto> conjuntoIndiceDireto = gerenciador.obterConjuntoDeIndicesDiretos(nomeDoArquivoDeIndices);
+    ifstream arquivoCsv(gerenciador.getNomeDoArquivoCsv());
+
+    cout << endl << "- Lista dos filmes documentais com duracao superior a duas horas:" << endl << endl;
+
+    for (unsigned int i = 0; i < (unsigned int)conjuntoIndiceDireto.size(); i++)
+    {
+        ItemNetflix itemNetflix = conjuntoIndiceDireto[i].obterItemNetflix(arquivoCsv);
+
+        for (unsigned int j = 0; j < (unsigned int)itemNetflix.generos.size(); j++)
+        {
+            if (itemNetflix.tipo == "Movie" && toLowerCase(itemNetflix.generos[j]).find("documentaries") != string::npos)
+            {
+                string duracao = itemNetflix.duracao;
+                duracao = duracao.substr(0, duracao.size() - 4);
+
+                if (stoi(duracao) > 120)
+                {
+                    itemNetflix.visualizarItem();
+                    cout << endl;
+                }
+            }
+        }
+    }
 }
 
 // Métodos privados da classe App:
